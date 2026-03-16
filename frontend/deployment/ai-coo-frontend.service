@@ -1,0 +1,27 @@
+[Unit]
+Description=AI COO Dashboard Frontend (Next.js)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/ai-coo/frontend
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOSTNAME=0.0.0.0
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/var/www/ai-coo/logs/frontend.log
+StandardError=append:/var/www/ai-coo/logs/frontend.log
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/ai-coo/logs
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

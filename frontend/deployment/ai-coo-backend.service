@@ -1,0 +1,26 @@
+[Unit]
+Description=AI COO Dashboard Backend (FastAPI)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/ai-coo/backend
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/var/www/ai-coo/backend/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/var/www/ai-coo/logs/backend.log
+StandardError=append:/var/www/ai-coo/logs/backend.log
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/ai-coo/logs
+ReadWritePaths=/var/www/ai-coo/backend/data
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
