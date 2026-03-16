@@ -46,17 +46,20 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          # Debug: verify key format
+          head -1 ~/.ssh/deploy_key
+          tail -1 ~/.ssh/deploy_key
 
       - name: Deploy to VPS
         run: |
           # Upload package
-          scp -i ~/.ssh/deploy_key deploy.tar.gz root@${{ secrets.VPS_HOST }}:/tmp/
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key deploy.tar.gz root@${{ secrets.VPS_HOST }}:/tmp/
 
           # Deploy on server
-          ssh -i ~/.ssh/deploy_key root@${{ secrets.VPS_HOST }} << 'ENDSSH'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key root@${{ secrets.VPS_HOST }} << 'ENDSSH'
             set -e
             cd /opt/ai-coo/frontend
 
