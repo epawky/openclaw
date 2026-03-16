@@ -46,12 +46,14 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          echo "${{ secrets.VPS_SSH_KEY_B64 }}" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
-          # Debug: verify key format
+          # Debug: verify key format (first and last lines)
           head -1 ~/.ssh/deploy_key
           tail -1 ~/.ssh/deploy_key
+          # Test SSH connection
+          ssh -o StrictHostKeyChecking=no -o BatchMode=yes -i ~/.ssh/deploy_key root@${{ secrets.VPS_HOST }} "echo 'SSH test successful'" || echo "SSH test failed"
 
       - name: Deploy to VPS
         run: |
