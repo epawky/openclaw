@@ -49,21 +49,32 @@ jobs:
           echo "${{ secrets.VPS_SSH_KEY_B64 }}" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
-          # Debug: verify key format (first and last lines)
-          head -1 ~/.ssh/deploy_key
-          tail -1 ~/.ssh/deploy_key
+
+          # Setup SSH multiplexing to reuse connection
+          cat >> ~/.ssh/config << EOF
+          Host vps
+            HostName ${{ secrets.VPS_HOST }}
+            User root
+            IdentityFile ~/.ssh/deploy_key
+            StrictHostKeyChecking no
+            ControlMaster auto
+            ControlPath ~/.ssh/sockets/%r@%h-%p
+            ControlPersist 600
+          EOF
+          mkdir -p ~/.ssh/sockets
+          chmod 700 ~/.ssh/sockets
+
+          # Establish persistent connection
+          ssh -f -N vps
+          echo "SSH multiplexed connection established"
 
       - name: Deploy to VPS
         run: |
-          # Upload package with retry
-          for i in 1 2 3; do
-            scp -o StrictHostKeyChecking=no -o ConnectTimeout=30 -i ~/.ssh/deploy_key deploy.tar.gz root@${{ secrets.VPS_HOST }}:/tmp/ && break
-            echo "SCP attempt $i failed, waiting 10 seconds..."
-            sleep 10
-          done
+          # Upload package using multiplexed connection
+          scp deploy.tar.gz vps:/tmp/
 
-          # Deploy on server
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key root@${{ secrets.VPS_HOST }} << 'ENDSSH'
+          # Deploy on server using multiplexed connection
+          ssh vps << 'ENDSSH'
             set -e
             cd /opt/ai-coo/frontend
 
