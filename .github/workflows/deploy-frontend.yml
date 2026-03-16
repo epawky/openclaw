@@ -1,0 +1,102 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ''
+          NEXT_PUBLIC_USE_MOCK_DATA: 'false'
+          NEXT_PUBLIC_APP_NAME: 'AI COO'
+
+      - name: Create deployment package
+        working-directory: frontend
+        run: |
+          tar -czvf ../deploy.tar.gz \
+            .next \
+            public \
+            package.json \
+            package-lock.json \
+            next.config.js \
+            .env.production
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        run: |
+          # Upload package
+          scp -i ~/.ssh/deploy_key deploy.tar.gz root@${{ secrets.VPS_HOST }}:/tmp/
+
+          # Deploy on server
+          ssh -i ~/.ssh/deploy_key root@${{ secrets.VPS_HOST }} << 'ENDSSH'
+            set -e
+            cd /opt/ai-coo/frontend
+
+            # Backup current deployment
+            if [ -d ".next" ]; then
+              mv .next .next.backup
+            fi
+
+            # Extract new deployment
+            tar -xzvf /tmp/deploy.tar.gz
+            rm /tmp/deploy.tar.gz
+
+            # Install production dependencies
+            npm ci --production
+
+            # Fix ownership
+            chown -R aicoo:aicoo /opt/ai-coo/frontend
+
+            # Restart service
+            systemctl restart ai-coo-frontend
+
+            # Wait and verify
+            sleep 5
+            if systemctl is-active --quiet ai-coo-frontend; then
+              echo "Deployment successful!"
+              rm -rf .next.backup
+            else
+              echo "Deployment failed, rolling back..."
+              rm -rf .next
+              mv .next.backup .next
+              systemctl restart ai-coo-frontend
+              exit 1
+            fi
+          ENDSSH
+
+      - name: Verify deployment
+        run: |
+          sleep 10
+          curl -sf http://${{ secrets.VPS_HOST }}/healthz || exit 1
+          echo "Health check passed!"
