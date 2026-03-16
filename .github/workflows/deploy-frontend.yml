@@ -50,32 +50,11 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
-          # Setup SSH multiplexing to reuse connection
-          cat >> ~/.ssh/config << EOF
-          Host vps
-            HostName ${{ secrets.VPS_HOST }}
-            User root
-            IdentityFile ~/.ssh/deploy_key
-            StrictHostKeyChecking no
-            ControlMaster auto
-            ControlPath ~/.ssh/sockets/%r@%h-%p
-            ControlPersist 600
-          EOF
-          mkdir -p ~/.ssh/sockets
-          chmod 700 ~/.ssh/sockets
-
-          # Establish persistent connection
-          ssh -f -N vps
-          echo "SSH multiplexed connection established"
-
       - name: Deploy to VPS
         run: |
-          # Upload package using multiplexed connection
-          scp deploy.tar.gz vps:/tmp/
-
-          # Deploy on server using multiplexed connection
-          ssh vps << 'ENDSSH'
-            set -e
+          # Single SSH session: pipe tarball and run deployment commands
+          cat deploy.tar.gz | ssh -o StrictHostKeyChecking=no -o ConnectTimeout=60 -i ~/.ssh/deploy_key root@${{ secrets.VPS_HOST }} '
+            cat > /tmp/deploy.tar.gz
             cd /opt/ai-coo/frontend
 
             # Backup current deployment
@@ -108,10 +87,10 @@ jobs:
               systemctl restart ai-coo-frontend
               exit 1
             fi
-          ENDSSH
+          '
 
       - name: Verify deployment
         run: |
           sleep 10
-          curl -sf http://${{ secrets.VPS_HOST }}/healthz || exit 1
+          curl -sf http://${{ secrets.VPS_HOST }}:18789/healthz || exit 1
           echo "Health check passed!"
