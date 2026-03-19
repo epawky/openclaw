@@ -44,7 +44,7 @@ export function RiskBarChart({ data, height = 300 }: RiskBarChartProps) {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-slate-600">
+        <CardTitle className="text-sm font-medium text-cartex-muted">
           Revenue at Risk by SKU
         </CardTitle>
       </CardHeader>
@@ -55,12 +55,13 @@ export function RiskBarChart({ data, height = 300 }: RiskBarChartProps) {
             layout="vertical"
             margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={true} vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" className="stroke-[var(--cartex-border)]" horizontal={true} vertical={false} />
             <XAxis
               type="number"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 11, fill: '#64748b' }}
+              tick={{ fontSize: 11 }}
+              className="fill-[var(--cartex-muted)]"
               tickFormatter={(v) => formatCurrency(v).replace('.00', '')}
             />
             <YAxis
@@ -68,15 +69,17 @@ export function RiskBarChart({ data, height = 300 }: RiskBarChartProps) {
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 11, fill: '#64748b' }}
+              tick={{ fontSize: 11 }}
+              className="fill-[var(--cartex-muted)]"
               width={100}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'white',
-                border: '1px solid #e2e8f0',
+                backgroundColor: 'var(--cartex-card)',
+                border: '1px solid var(--cartex-border)',
                 borderRadius: '8px',
                 boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                color: 'var(--cartex-text)',
               }}
               formatter={(value: number) => [formatCurrency(value), 'Revenue at Risk']}
               labelFormatter={(_, payload) => {

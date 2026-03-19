@@ -27,7 +27,7 @@ export function TrendChart({
   title,
   data,
   dataKey = 'value',
-  color = '#6366f1',
+  color = 'var(--cartex-teal)',
   valueFormatter = formatNumber,
   height = 200,
 }: TrendChartProps) {
@@ -42,35 +42,38 @@ export function TrendChart({
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-slate-600">{title}</CardTitle>
+        <CardTitle className="text-sm font-medium text-cartex-muted">{title}</CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
         <ResponsiveContainer width="100%" height={height}>
           <LineChart data={formattedData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" className="stroke-[var(--cartex-border)]" vertical={false} />
             <XAxis
               dataKey="displayDate"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 11, fill: '#64748b' }}
+              tick={{ fontSize: 11 }}
+              className="fill-[var(--cartex-muted)]"
               dy={10}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 11, fill: '#64748b' }}
+              tick={{ fontSize: 11 }}
+              className="fill-[var(--cartex-muted)]"
               tickFormatter={valueFormatter}
               width={60}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'white',
-                border: '1px solid #e2e8f0',
+                backgroundColor: 'var(--cartex-card)',
+                border: '1px solid var(--cartex-border)',
                 borderRadius: '8px',
                 boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                color: 'var(--cartex-text)',
               }}
               formatter={(value: number) => [valueFormatter(value), title]}
-              labelStyle={{ color: '#64748b', marginBottom: '4px' }}
+              labelStyle={{ color: 'var(--cartex-muted)', marginBottom: '4px' }}
             />
             <Line
               type="monotone"
@@ -97,7 +100,7 @@ export function RevenueTrendChart({ data }: RevenueTrendChartProps) {
     <TrendChart
       title="Revenue Trend"
       data={data}
-      color="#10b981"
+      color="var(--cartex-success)"
       valueFormatter={(v) => formatCurrency(v, 'USD', 'en-US').replace('.00', '')}
     />
   );
@@ -110,7 +113,7 @@ interface OrdersTrendChartProps {
 
 export function OrdersTrendChart({ data }: OrdersTrendChartProps) {
   return (
-    <TrendChart title="Orders Trend" data={data} color="#6366f1" valueFormatter={formatNumber} />
+    <TrendChart title="Orders Trend" data={data} color="var(--cartex-info)" valueFormatter={formatNumber} />
   );
 }
 
@@ -124,7 +127,7 @@ export function StockoutRiskTrendChart({ data }: StockoutRiskTrendChartProps) {
     <TrendChart
       title="SKUs at Stockout Risk"
       data={data}
-      color="#f59e0b"
+      color="var(--cartex-warning)"
       valueFormatter={(v) => `${v} SKUs`}
     />
   );
