@@ -1,14 +1,15 @@
 'use client';
 
 import React from 'react';
-import { MessageSquare, TrendingDown, AlertTriangle, Users, Tag } from 'lucide-react';
+import { MessageSquare, TrendingDown, AlertTriangle, Users, Tag, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { isDemoMode } from '@/lib/demo/config';
 
 interface SuggestedPromptsProps {
   onSelect: (prompt: string) => void;
 }
 
-const suggestions = [
+const defaultSuggestions = [
   {
     icon: MessageSquare,
     text: 'What needs attention today?',
@@ -40,6 +41,42 @@ const suggestions = [
     bg: 'bg-purple-50 hover:bg-purple-100',
   },
 ];
+
+// Demo mode specific suggestions for Prairie Prime Meats
+const demoSuggestions = [
+  {
+    icon: AlertTriangle,
+    text: "What's my biggest risk right now?",
+    color: 'text-red-600',
+    bg: 'bg-red-50 hover:bg-red-100',
+  },
+  {
+    icon: TrendingDown,
+    text: 'Why is revenue down this week?',
+    color: 'text-orange-600',
+    bg: 'bg-orange-50 hover:bg-orange-100',
+  },
+  {
+    icon: Package,
+    text: 'What should I do about the Pork Sampler inventory?',
+    color: 'text-brand-600',
+    bg: 'bg-brand-50 hover:bg-brand-100',
+  },
+  {
+    icon: Users,
+    text: 'Why is customer retention dropping?',
+    color: 'text-green-600',
+    bg: 'bg-green-50 hover:bg-green-100',
+  },
+  {
+    icon: Tag,
+    text: 'What bundle opportunities exist?',
+    color: 'text-purple-600',
+    bg: 'bg-purple-50 hover:bg-purple-100',
+  },
+];
+
+const suggestions = isDemoMode() ? demoSuggestions : defaultSuggestions;
 
 export function SuggestedPrompts({ onSelect }: SuggestedPromptsProps) {
   return (

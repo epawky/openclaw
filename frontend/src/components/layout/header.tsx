@@ -11,24 +11,40 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { cn } from '@/lib/utils';
+import { DemoIndicator } from '@/components/demo';
+
+export type DateRange = 'today' | '7d' | '30d' | '90d' | 'custom';
 
 interface HeaderProps {
   title: string;
   subtitle?: string;
   lastAgentRun?: string;
   dataFreshness?: 'fresh' | 'stale' | 'updating';
+  dateRange?: DateRange;
+  onDateRangeChange?: (range: DateRange) => void;
 }
 
-export function Header({ title, subtitle, lastAgentRun, dataFreshness = 'fresh' }: HeaderProps) {
+export function Header({
+  title,
+  subtitle,
+  lastAgentRun,
+  dataFreshness = 'fresh',
+  dateRange = '7d',
+  onDateRangeChange,
+}: HeaderProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-border bg-surface-primary px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-cartex bg-cartex-surface px-6">
       <div>
-        <h1 className="text-xl font-semibold text-slate-900">{title}</h1>
-        {subtitle && <p className="text-sm text-slate-500">{subtitle}</p>}
+        <h1 className="text-xl font-semibold text-cartex">{title}</h1>
+        {subtitle && <p className="text-sm text-cartex-muted">{subtitle}</p>}
       </div>
 
       <div className="flex items-center gap-4">
+        {/* Demo Mode Indicator */}
+        <DemoIndicator />
+
         {/* Data Freshness Badge */}
         <div className="flex items-center gap-2">
           <Badge
@@ -57,14 +73,14 @@ export function Header({ title, subtitle, lastAgentRun, dataFreshness = 'fresh' 
 
         {/* Last Agent Run */}
         {lastAgentRun && (
-          <div className="flex items-center gap-1.5 text-sm text-slate-500">
+          <div className="flex items-center gap-1.5 text-sm text-cartex-muted">
             <Clock className="h-4 w-4" />
             <span>Agent ran {lastAgentRun}</span>
           </div>
         )}
 
         {/* Date Range Selector */}
-        <Select defaultValue="7d">
+        <Select value={dateRange} onValueChange={(value) => onDateRangeChange?.(value as DateRange)}>
           <SelectTrigger className="w-[140px]">
             <Calendar className="mr-2 h-4 w-4" />
             <SelectValue placeholder="Select range" />
@@ -94,6 +110,9 @@ export function Header({ title, subtitle, lastAgentRun, dataFreshness = 'fresh' 
             </SelectItem>
           </SelectContent>
         </Select>
+
+        {/* Theme Toggle */}
+        <ThemeToggle />
 
         {/* Refresh Button */}
         <Button variant="outline" size="icon">

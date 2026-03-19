@@ -6,16 +6,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'bg-brand-600 text-white hover:bg-brand-700',
-        destructive: 'bg-red-600 text-white hover:bg-red-700',
-        outline: 'border border-surface-border bg-transparent hover:bg-surface-hover',
-        secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200',
-        ghost: 'hover:bg-surface-hover',
-        link: 'text-brand-600 underline-offset-4 hover:underline',
+        default: 'bg-cartex-teal text-white hover:opacity-90',
+        destructive: 'bg-[var(--cartex-danger)] text-white hover:opacity-90',
+        outline: 'border bg-transparent text-cartex hover:bg-[color-mix(in_srgb,var(--cartex-border)_50%,transparent)]',
+        secondary: 'bg-[color-mix(in_srgb,var(--cartex-border)_50%,transparent)] text-cartex hover:bg-[color-mix(in_srgb,var(--cartex-border)_70%,transparent)]',
+        ghost: 'text-cartex hover:bg-[color-mix(in_srgb,var(--cartex-border)_50%,transparent)]',
+        link: 'text-cartex-teal underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-10 px-4 py-2',

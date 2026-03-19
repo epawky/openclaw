@@ -353,3 +353,218 @@ export interface Store {
   currency: string;
   timezone: string;
 }
+
+// =============================================================================
+// Action Execution Types
+// =============================================================================
+
+export type ActionType =
+  | 'reorder_inventory'
+  | 'launch_promotion'
+  | 'queue_retention_campaign'
+  | 'mark_for_review'
+  | 'dismiss_recommendation';
+
+export type ActionStatus = 'queued' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
+
+export interface ActionParameters {
+  sku?: string;
+  quantity?: number;
+  discountPercent?: number;
+  durationDays?: number;
+  expedite?: boolean;
+  segmentId?: string;
+  campaignName?: string;
+  notes?: string;
+  [key: string]: unknown;
+}
+
+export interface ActionResult {
+  success: boolean;
+  message: string;
+  data?: {
+    sku?: string;
+    quantity?: number;
+    estimatedInventoryCoverageDays?: number;
+    promotionId?: string;
+    campaignId?: string;
+    projectedRevenue?: number;
+    projectedUnits?: number;
+    [key: string]: unknown;
+  };
+}
+
+export interface ActionExecution {
+  id: string;
+  recommendationId: string;
+  actionType: ActionType;
+  parameters: ActionParameters;
+  status: ActionStatus;
+  result?: ActionResult;
+  createdAt: string;
+  completedAt?: string;
+  summary: string;
+}
+
+export interface ActionExecuteRequest {
+  recommendationId: string;
+  actionType: ActionType;
+  parameters: ActionParameters;
+}
+
+export interface ActionExecuteResponse {
+  execution: ActionExecution;
+  recommendation?: Recommendation;
+}
+
+// =============================================================================
+// Recommendation Lifecycle Types
+// =============================================================================
+
+export type RecommendationLifecycleStatus =
+  | 'open'
+  | 'accepted'
+  | 'dismissed'
+  | 'queued'
+  | 'completed'
+  | 'monitoring';
+
+export type RecommendationEventType =
+  | 'created'
+  | 'viewed'
+  | 'accepted'
+  | 'dismissed'
+  | 'action_queued'
+  | 'action_started'
+  | 'action_completed'
+  | 'action_failed'
+  | 'reopened'
+  | 'escalated'
+  | 'outcome_recorded';
+
+export interface RecommendationHistoryEvent {
+  id: string;
+  recommendationId: string;
+  eventType: RecommendationEventType;
+  previousStatus?: RecommendationLifecycleStatus;
+  newStatus?: RecommendationLifecycleStatus;
+  summary: string;
+  actionExecutionId?: string;
+  metadata?: Record<string, unknown>;
+  createdAt: string;
+  createdBy?: string;
+}
+
+export interface RecommendationWithLifecycle extends Recommendation {
+  lifecycleStatus: RecommendationLifecycleStatus;
+  actedOnAt?: string;
+  closedAt?: string;
+  actionTaken?: ActionType;
+  outcomeValue?: number;
+  outcomeSummary?: string;
+  owner?: string;
+  history?: RecommendationHistoryEvent[];
+}
+
+export interface RecommendationTimeline {
+  recommendationId: string;
+  events: RecommendationHistoryEvent[];
+  currentStatus: RecommendationLifecycleStatus;
+  totalDuration?: number;
+  actionsExecuted: number;
+}
+
+// =============================================================================
+// Change Detection Types
+// =============================================================================
+
+export type ChangeType =
+  | 'revenue_up'
+  | 'revenue_down'
+  | 'orders_up'
+  | 'orders_down'
+  | 'aov_up'
+  | 'aov_down'
+  | 'repeat_rate_up'
+  | 'repeat_rate_down'
+  | 'sku_demand_up'
+  | 'sku_demand_down'
+  | 'stockout_risk_increased'
+  | 'stockout_risk_decreased'
+  | 'slow_mover_worsened'
+  | 'slow_mover_improved'
+  | 'promotion_candidate_improved'
+  | 'cohort_retention_dropped'
+  | 'cohort_retention_improved'
+  | 'new_stockout_risk'
+  | 'stockout_resolved';
+
+export type ChangeEntityType =
+  | 'store'
+  | 'sku'
+  | 'customer_segment'
+  | 'cohort'
+  | 'product_category';
+
+export type ChangeSignificance = 'critical' | 'high' | 'medium' | 'low';
+
+export type ChangeDirection = 'positive' | 'negative' | 'neutral';
+
+export interface ChangeEvent {
+  id: string;
+  changeDate: string;
+  changeType: ChangeType;
+  entityType: ChangeEntityType;
+  entityId: string;
+  entityName?: string;
+  metricName: string;
+  currentValue: number;
+  priorValue: number;
+  absoluteChange: number;
+  percentChange: number;
+  significance: ChangeSignificance;
+  direction: ChangeDirection;
+  evidence?: {
+    description: string;
+    data?: Record<string, unknown>;
+  }[];
+  relatedRecommendationIds?: string[];
+  detectedAt: string;
+}
+
+export interface ChangeSummary {
+  period: {
+    start: string;
+    end: string;
+  };
+  totalChanges: number;
+  criticalChanges: number;
+  positiveChanges: ChangeEvent[];
+  negativeChanges: ChangeEvent[];
+  byCategory: {
+    revenue: ChangeEvent[];
+    inventory: ChangeEvent[];
+    customers: ChangeEvent[];
+    operations: ChangeEvent[];
+  };
+}
+
+export interface ChangeDetectionConfig {
+  minPercentChange: number;
+  minRevenueThreshold: number;
+  minUnitsThreshold: number;
+  significanceBands: {
+    critical: number;
+    high: number;
+    medium: number;
+  };
+}
+
+// =============================================================================
+// Extended Daily Analysis with Changes
+// =============================================================================
+
+export interface DailyAnalysisWithChanges extends DailyAnalysis {
+  changes: ChangeSummary;
+  recentActions: ActionExecution[];
+}

@@ -43,22 +43,23 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-surface-border bg-surface-primary transition-all duration-300',
+        'fixed left-0 top-0 z-40 flex h-screen flex-col border-r transition-all duration-300',
+        'bg-cartex-surface border-cartex',
         collapsed ? 'w-16' : 'w-64'
       )}
     >
       {/* Logo */}
-      <div className="flex h-16 items-center justify-between border-b border-surface-border px-4">
+      <div className="flex h-16 items-center justify-between border-b border-cartex px-4">
         {!collapsed && (
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white font-semibold">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cartex-teal text-white font-semibold">
               AI
             </div>
-            <span className="text-lg font-semibold text-slate-900">COO</span>
+            <span className="text-lg font-semibold text-cartex">COO</span>
           </div>
         )}
         {collapsed && (
-          <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white font-semibold text-xs">
+          <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-cartex-teal text-white font-semibold text-xs">
             AI
           </div>
         )}
@@ -78,13 +79,13 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                     isActive
-                      ? 'bg-brand-50 text-brand-700'
-                      : 'text-slate-600 hover:bg-surface-hover hover:text-slate-900',
+                      ? 'bg-[color-mix(in_srgb,var(--cartex-teal)_15%,transparent)] text-cartex-teal'
+                      : 'text-cartex-muted hover:bg-[color-mix(in_srgb,var(--cartex-border)_50%,transparent)] hover:text-cartex',
                     collapsed && 'justify-center px-2'
                   )}
                   title={collapsed ? item.label : undefined}
                 >
-                  <Icon className={cn('h-5 w-5 flex-shrink-0', isActive && 'text-brand-600')} />
+                  <Icon className={cn('h-5 w-5 flex-shrink-0', isActive && 'text-cartex-teal')} />
                   {!collapsed && <span>{item.label}</span>}
                 </Link>
               </li>
@@ -94,7 +95,7 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-surface-border p-3">
+      <div className="border-t border-cartex p-3">
         <Button
           variant="ghost"
           size="sm"
