@@ -44,19 +44,19 @@
   }
 
   .dark {
-    /* Dark theme - Cartex palette */
+    /* Dark theme - Stockroom palette (contrast-fixed) */
     --cartex-bg: #07080F;
     --cartex-surface: #0D1120;
     --cartex-card: #141C2E;
-    --cartex-border: #1E2A3E;
-    --cartex-teal: #00C9A7;
-    --cartex-ember: #FF5F1F;
-    --cartex-text: #F0F4FF;
-    --cartex-muted: #8899B4;
-    --cartex-success: #00D68F;
-    --cartex-warning: #FFB800;
-    --cartex-danger: #FF3D57;
-    --cartex-info: #4D9EFF;
+    --cartex-border: #2A3A52;
+    --cartex-teal: #00E5BF;
+    --cartex-ember: #FF7A45;
+    --cartex-text: #F5F8FF;
+    --cartex-muted: #A8BBCF;
+    --cartex-success: #00F0A0;
+    --cartex-warning: #FFD040;
+    --cartex-danger: #FF5C72;
+    --cartex-info: #6EB5FF;
 
     /* Shadcn variables mapped to Cartex dark */
     --background: 228 47% 3%;
