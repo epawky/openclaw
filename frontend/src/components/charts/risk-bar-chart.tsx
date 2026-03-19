@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -15,20 +15,47 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils';
 import type { InventorySKU, RiskClass } from '@/lib/types';
 
+// Hook to get CSS variable value
+function useCssVar(varName: string, fallback: string): string {
+  const [value, setValue] = useState(fallback);
+
+  useEffect(() => {
+    const updateValue = () => {
+      const computed = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+      setValue(computed || fallback);
+    };
+
+    updateValue();
+
+    // Listen for theme changes
+    const observer = new MutationObserver(updateValue);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    return () => observer.disconnect();
+  }, [varName, fallback]);
+
+  return value;
+}
+
 interface RiskBarChartProps {
   data: InventorySKU[];
   height?: number;
 }
 
 const riskColors: Record<RiskClass, string> = {
-  critical: '#ef4444',
-  high: '#f97316',
-  medium: '#eab308',
-  low: '#3b82f6',
-  healthy: '#22c55e',
+  critical: '#FF5C72',
+  high: '#FF7A45',
+  medium: '#FFD040',
+  low: '#6EB5FF',
+  healthy: '#00F0A0',
 };
 
 export function RiskBarChart({ data, height = 300 }: RiskBarChartProps) {
+  const borderColor = useCssVar('--cartex-border', '#2A3A52');
+  const mutedColor = useCssVar('--cartex-muted', '#A8BBCF');
+  const cardColor = useCssVar('--cartex-card', '#141C2E');
+  const textColor = useCssVar('--cartex-text', '#F5F8FF');
+
   const chartData = data
     .sort((a, b) => b.estimatedRevenueAtRisk - a.estimatedRevenueAtRisk)
     .slice(0, 7)
@@ -55,13 +82,12 @@ export function RiskBarChart({ data, height = 300 }: RiskBarChartProps) {
             layout="vertical"
             margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" className="stroke-[var(--cartex-border)]" horizontal={true} vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke={borderColor} horizontal={true} vertical={false} />
             <XAxis
               type="number"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 11 }}
-              className="fill-[var(--cartex-muted)]"
+              tick={{ fontSize: 11, fill: mutedColor }}
               tickFormatter={(v) => formatCurrency(v).replace('.00', '')}
             />
             <YAxis
@@ -69,17 +95,16 @@ export function RiskBarChart({ data, height = 300 }: RiskBarChartProps) {
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 11 }}
-              className="fill-[var(--cartex-muted)]"
+              tick={{ fontSize: 11, fill: mutedColor }}
               width={100}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'var(--cartex-card)',
-                border: '1px solid var(--cartex-border)',
+                backgroundColor: cardColor,
+                border: `1px solid ${borderColor}`,
                 borderRadius: '8px',
                 boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                color: 'var(--cartex-text)',
+                color: textColor,
               }}
               formatter={(value: number) => [formatCurrency(value), 'Revenue at Risk']}
               labelFormatter={(_, payload) => {
