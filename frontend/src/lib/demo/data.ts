@@ -513,6 +513,7 @@ export const demoCustomerAnalysis: CustomerAnalysis = {
 // Trend Data
 // =============================================================================
 
+// Revenue trends (in dollars)
 export const demoTrends: TrendDataPoint[] = [
   { date: '2024-06-01', value: 4120 },
   { date: '2024-06-02', value: 4890 },
@@ -528,6 +529,42 @@ export const demoTrends: TrendDataPoint[] = [
   { date: '2024-06-12', value: 4340 },
   { date: '2024-06-13', value: 4890 },
   { date: '2024-06-14', value: 5340 },
+];
+
+// Orders trends (count of orders per day)
+export const demoOrdersTrends: TrendDataPoint[] = [
+  { date: '2024-06-01', value: 46 },
+  { date: '2024-06-02', value: 55 },
+  { date: '2024-06-03', value: 42 },
+  { date: '2024-06-04', value: 48 },
+  { date: '2024-06-05', value: 51 },
+  { date: '2024-06-06', value: 58 },
+  { date: '2024-06-07', value: 67 },
+  { date: '2024-06-08', value: 45 },
+  { date: '2024-06-09', value: 43 },
+  { date: '2024-06-10', value: 41 },
+  { date: '2024-06-11', value: 46 },
+  { date: '2024-06-12', value: 49 },
+  { date: '2024-06-13', value: 55 },
+  { date: '2024-06-14', value: 60 },
+];
+
+// SKUs at stockout risk trends (count of SKUs at risk)
+export const demoStockoutRiskTrends: TrendDataPoint[] = [
+  { date: '2024-06-01', value: 1 },
+  { date: '2024-06-02', value: 1 },
+  { date: '2024-06-03', value: 2 },
+  { date: '2024-06-04', value: 2 },
+  { date: '2024-06-05', value: 2 },
+  { date: '2024-06-06', value: 3 },
+  { date: '2024-06-07', value: 3 },
+  { date: '2024-06-08', value: 3 },
+  { date: '2024-06-09', value: 3 },
+  { date: '2024-06-10', value: 4 },
+  { date: '2024-06-11', value: 4 },
+  { date: '2024-06-12', value: 4 },
+  { date: '2024-06-13', value: 4 },
+  { date: '2024-06-14', value: 4 },
 ];
 
 // =============================================================================
@@ -1146,6 +1183,8 @@ export const demoData = {
   inventoryAnalysis: demoInventoryAnalysis,
   customerAnalysis: demoCustomerAnalysis,
   trends: demoTrends,
+  ordersTrends: demoOrdersTrends,
+  stockoutRiskTrends: demoStockoutRiskTrends,
   simulationResults: demoSimulationResults,
   askResponses: demoAskResponses,
   recommendationHistory: demoRecommendationHistory,

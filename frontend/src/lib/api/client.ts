@@ -172,13 +172,13 @@ export async function getTrends(): Promise<ApiResponse<TrendDataPoint[]>> {
 
 export async function getAnalysisToday(): Promise<ApiResponse<DailyAnalysis>> {
   if (shouldUseMockData()) {
-    const { demoKPIs, demoBrief, demoTrends, demoRecommendations } = await getDemoData();
+    const { demoKPIs, demoBrief, demoTrends, demoOrdersTrends, demoStockoutRiskTrends, demoRecommendations } = await getDemoData();
     return {
       data: {
         date: new Date().toISOString(),
         kpis: demoKPIs,
         brief: demoBrief,
-        trends: { revenue: demoTrends, orders: [], stockoutRisk: [] },
+        trends: { revenue: demoTrends, orders: demoOrdersTrends, stockoutRisk: demoStockoutRiskTrends },
         topRecommendations: demoRecommendations.slice(0, 5),
       },
     };
