@@ -1,6 +1,6 @@
 import { DashboardLayout } from '@/components/layout';
 import { DemoProvider } from '@/lib/demo';
-import { DemoBadge, WalkthroughOverlay } from '@/components/demo';
+import { WalkthroughOverlay } from '@/components/demo';
 
 export default function DashboardRootLayout({
   children,
@@ -10,7 +10,6 @@ export default function DashboardRootLayout({
   return (
     <DemoProvider>
       <DashboardLayout>{children}</DashboardLayout>
-      <DemoBadge />
       <WalkthroughOverlay />
     </DemoProvider>
   );

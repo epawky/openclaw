@@ -109,26 +109,77 @@ export function DemoBadge() {
 // =============================================================================
 
 export function DemoIndicator() {
-  const { isDemoMode, startWalkthrough, state } = useDemo();
+  const { isDemoMode, startWalkthrough, resetDemo, state, companyName } = useDemo();
+  const [open, setOpen] = useState(false);
 
   if (!isDemoMode) {
     return null;
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-purple-100 to-brand-100 px-3 py-1">
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-purple-100 to-brand-100 px-3 py-1 hover:from-purple-200 hover:to-brand-200 transition-colors"
+      >
         <Sparkles className="h-3.5 w-3.5 text-purple-600" />
         <span className="text-xs font-medium text-purple-700">Demo</span>
-      </div>
-      {!state.walkthroughActive && (
-        <button
-          onClick={startWalkthrough}
-          className="flex items-center gap-1 text-xs text-slate-500 hover:text-brand-600"
-        >
-          <PlayCircle className="h-3.5 w-3.5" />
-          Tour
-        </button>
+        <ChevronDown className={cn("h-3 w-3 text-purple-600 transition-transform", open && "rotate-180")} />
+      </button>
+
+      {open && (
+        <>
+          {/* Backdrop to close on click outside */}
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setOpen(false)}
+          />
+          {/* Dropdown */}
+          <div className="absolute right-0 top-full mt-2 z-50 w-64 rounded-lg border bg-cartex-card border-cartex shadow-lg">
+            {/* Company info */}
+            <div className="p-3 border-b border-cartex">
+              <p className="text-xs text-cartex-muted">Demo Company</p>
+              <p className="font-medium text-cartex">{companyName}</p>
+            </div>
+
+            {/* Info text */}
+            <div className="p-3 border-b border-cartex">
+              <div className="flex items-start gap-2 text-xs text-cartex-muted">
+                <Info className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
+                <p>You&apos;re viewing demo data. All changes are temporary.</p>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="p-3 space-y-2">
+              {!state.walkthroughActive && (
+                <Button
+                  onClick={() => {
+                    startWalkthrough();
+                    setOpen(false);
+                  }}
+                  size="sm"
+                  className="w-full gap-2"
+                >
+                  <PlayCircle className="h-4 w-4" />
+                  Start Guided Tour
+                </Button>
+              )}
+              <Button
+                onClick={() => {
+                  resetDemo();
+                  setOpen(false);
+                }}
+                variant="outline"
+                size="sm"
+                className="w-full gap-2"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Reset Demo Data
+              </Button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
