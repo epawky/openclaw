@@ -37,11 +37,18 @@ const typeLabels: Record<RecommendationType, string> = {
   reorder_suggestion: 'Reorder',
 };
 
-const urgencyLabels: Record<string, { label: string; color: string }> = {
-  immediate: { label: 'Immediate', color: 'text-red-600' },
-  this_week: { label: 'This Week', color: 'text-orange-600' },
-  this_month: { label: 'This Month', color: 'text-yellow-600' },
-  low: { label: 'Low', color: 'text-slate-600' },
+const urgencyColors: Record<string, string> = {
+  immediate: 'var(--cartex-danger)',
+  this_week: 'var(--cartex-ember)',
+  this_month: 'var(--cartex-warning)',
+  low: 'var(--cartex-muted)',
+};
+
+const urgencyLabels: Record<string, string> = {
+  immediate: 'Immediate',
+  this_week: 'This Week',
+  this_month: 'This Month',
+  low: 'Low',
 };
 
 const confidenceStyles: Record<ConfidenceLevel, string> = {
@@ -148,8 +155,8 @@ function ActionQueueContent() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-500 border-t-transparent mx-auto" />
-          <p className="mt-4 text-sm text-slate-500">Loading recommendations...</p>
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-t-transparent mx-auto" style={{ borderColor: 'var(--cartex-teal)', borderTopColor: 'transparent' }} />
+          <p className="mt-4 text-sm" style={{ color: 'var(--cartex-muted)' }}>Loading recommendations...</p>
         </div>
       </div>
     );
@@ -159,8 +166,8 @@ function ActionQueueContent() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <AlertTriangle className="h-12 w-12 text-red-500 mx-auto" />
-          <p className="mt-4 text-sm text-slate-700">{error}</p>
+          <AlertTriangle className="h-12 w-12 mx-auto" style={{ color: 'var(--cartex-danger)' }} />
+          <p className="mt-4 text-sm" style={{ color: 'var(--cartex-text)' }}>{error}</p>
         </div>
       </div>
     );
@@ -181,12 +188,12 @@ function ActionQueueContent() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-yellow-100">
-                  <Clock className="h-5 w-5 text-yellow-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--cartex-warning) 20%, transparent)' }}>
+                  <Clock className="h-5 w-5" style={{ color: 'var(--cartex-warning)' }} />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Pending</p>
-                  <p className="text-2xl font-semibold">{stats.pending}</p>
+                  <p className="text-sm" style={{ color: 'var(--cartex-muted)' }}>Pending</p>
+                  <p className="text-2xl font-semibold" style={{ color: 'var(--cartex-text)' }}>{stats.pending}</p>
                 </div>
               </div>
             </CardContent>
@@ -194,12 +201,12 @@ function ActionQueueContent() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
-                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--cartex-danger) 20%, transparent)' }}>
+                  <AlertTriangle className="h-5 w-5" style={{ color: 'var(--cartex-danger)' }} />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Critical</p>
-                  <p className="text-2xl font-semibold">{stats.critical}</p>
+                  <p className="text-sm" style={{ color: 'var(--cartex-muted)' }}>Critical</p>
+                  <p className="text-2xl font-semibold" style={{ color: 'var(--cartex-text)' }}>{stats.critical}</p>
                 </div>
               </div>
             </CardContent>
@@ -207,12 +214,12 @@ function ActionQueueContent() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
-                  <CheckCircle2 className="h-5 w-5 text-green-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--cartex-success) 20%, transparent)' }}>
+                  <CheckCircle2 className="h-5 w-5" style={{ color: 'var(--cartex-success)' }} />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Accepted</p>
-                  <p className="text-2xl font-semibold">{stats.accepted}</p>
+                  <p className="text-sm" style={{ color: 'var(--cartex-muted)' }}>Accepted</p>
+                  <p className="text-2xl font-semibold" style={{ color: 'var(--cartex-text)' }}>{stats.accepted}</p>
                 </div>
               </div>
             </CardContent>
@@ -220,12 +227,12 @@ function ActionQueueContent() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100">
-                  <AlertTriangle className="h-5 w-5 text-brand-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--cartex-teal) 20%, transparent)' }}>
+                  <AlertTriangle className="h-5 w-5" style={{ color: 'var(--cartex-teal)' }} />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Impact at Risk</p>
-                  <p className="text-2xl font-semibold">
+                  <p className="text-sm" style={{ color: 'var(--cartex-muted)' }}>Impact at Risk</p>
+                  <p className="text-2xl font-semibold" style={{ color: 'var(--cartex-text)' }}>
                     ${stats.totalImpact.toLocaleString()}
                   </p>
                 </div>
@@ -244,7 +251,7 @@ function ActionQueueContent() {
         {/* Recommendations Table */}
         <Card>
           <CardHeader className="pb-0">
-            <CardTitle className="text-sm font-medium text-slate-600">
+            <CardTitle className="text-sm font-medium" style={{ color: 'var(--cartex-muted)' }}>
               {recommendations.length} Recommendations
             </CardTitle>
           </CardHeader>
@@ -252,7 +259,7 @@ function ActionQueueContent() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-surface-border bg-slate-50">
+                  <tr style={{ borderBottom: '1px solid var(--cartex-border)', backgroundColor: 'var(--cartex-surface)' }}>
                     <th className="table-header px-4 py-3 text-left">#</th>
                     <th className="table-header px-4 py-3 text-left">Recommendation</th>
                     <th className="table-header px-4 py-3 text-left">Type</th>
@@ -270,10 +277,11 @@ function ActionQueueContent() {
                     <tr
                       key={rec.id}
                       onClick={() => handleRowClick(rec)}
-                      className={cn(
-                        'table-row cursor-pointer',
-                        selectedId === rec.id && 'bg-brand-50'
-                      )}
+                      className="cursor-pointer transition-colors hover:bg-[var(--cartex-surface)]"
+                      style={{
+                        borderBottom: '1px solid var(--cartex-border)',
+                        backgroundColor: selectedId === rec.id ? 'var(--cartex-surface)' : undefined,
+                      }}
                     >
                       <td className="px-4 py-3">
                         <Badge className={priorityStyles[rec.priority]}>
@@ -281,22 +289,22 @@ function ActionQueueContent() {
                         </Badge>
                       </td>
                       <td className="px-4 py-3">
-                        <p className="text-sm font-medium text-slate-900 max-w-xs truncate">
+                        <p className="text-sm font-medium max-w-xs truncate" style={{ color: 'var(--cartex-text)' }}>
                           {rec.title}
                         </p>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="text-xs text-slate-600">{typeLabels[rec.type]}</span>
+                        <span className="text-xs" style={{ color: 'var(--cartex-muted)' }}>{typeLabels[rec.type]}</span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="text-xs text-slate-500">{rec.entity}</span>
+                        <span className="text-xs" style={{ color: 'var(--cartex-tertiary)' }}>{rec.entity}</span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="text-sm text-slate-700">{rec.impactEstimate}</span>
+                        <span className="text-sm" style={{ color: 'var(--cartex-muted)' }}>{rec.impactEstimate}</span>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className={cn('text-xs font-medium', urgencyLabels[rec.urgency].color)}>
-                          {urgencyLabels[rec.urgency].label}
+                        <span className="text-xs font-medium" style={{ color: urgencyColors[rec.urgency] }}>
+                          {urgencyLabels[rec.urgency]}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-center">
@@ -305,7 +313,7 @@ function ActionQueueContent() {
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="text-xs text-slate-500">
+                        <span className="text-xs" style={{ color: 'var(--cartex-tertiary)' }}>
                           {formatRelativeTime(rec.createdAt)}
                         </span>
                       </td>
@@ -315,7 +323,7 @@ function ActionQueueContent() {
                         </Badge>
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <ArrowRight className="inline-block h-4 w-4 text-slate-400" />
+                        <ArrowRight className="inline-block h-4 w-4" style={{ color: 'var(--cartex-muted)' }} />
                       </td>
                     </tr>
                   ))}
@@ -348,7 +356,7 @@ function ActionQueueContent() {
 
 export default function ActionQueuePage() {
   return (
-    <Suspense fallback={<div className="flex min-h-screen items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-500 border-t-transparent" /></div>}>
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-t-transparent" style={{ borderColor: 'var(--cartex-teal)', borderTopColor: 'transparent' }} /></div>}>
       <ActionQueueContent />
     </Suspense>
   );
