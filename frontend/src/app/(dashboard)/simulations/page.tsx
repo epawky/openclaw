@@ -270,7 +270,7 @@ function SimulationsContent() {
         dataFreshness="fresh"
       />
 
-      <div className="p-6">
+      <div className="p-4 lg:p-6">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Simulation Forms */}
           <div>

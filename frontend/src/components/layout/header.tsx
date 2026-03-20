@@ -35,45 +35,56 @@ export function Header({
   onDateRangeChange,
 }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-cartex bg-cartex-surface px-6">
-      <div>
-        <h1 className="text-xl font-semibold text-cartex">{title}</h1>
-        {subtitle && <p className="text-sm text-cartex-muted">{subtitle}</p>}
+    <header className="sticky top-0 z-20 border-b border-cartex bg-cartex-surface px-4 py-3 lg:px-6 lg:py-0 lg:h-16 lg:flex lg:items-center lg:justify-between">
+      {/* Title row - always visible */}
+      <div className="flex items-center justify-between lg:block">
+        <div>
+          <h1 className="text-lg lg:text-xl font-semibold text-cartex">{title}</h1>
+          {subtitle && <p className="text-xs lg:text-sm text-cartex-muted">{subtitle}</p>}
+        </div>
+        {/* Mobile-only quick actions */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+          <Button variant="outline" size="icon" className="h-8 w-8">
+            <RefreshCw className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      {/* Controls row - scrollable on mobile */}
+      <div className="flex items-center gap-2 lg:gap-4 mt-3 lg:mt-0 overflow-x-auto pb-2 lg:pb-0 -mx-4 px-4 lg:mx-0 lg:px-0 lg:overflow-visible">
         {/* Demo Mode Indicator */}
         <DemoIndicator />
 
         {/* Data Freshness Badge */}
-        <div className="flex items-center gap-2">
-          <Badge
-            variant={
-              dataFreshness === 'fresh'
-                ? 'success'
-                : dataFreshness === 'stale'
-                ? 'warning'
-                : 'secondary'
-            }
-            className="flex items-center gap-1"
-          >
-            <span
-              className={cn(
-                'h-1.5 w-1.5 rounded-full',
-                dataFreshness === 'fresh' && 'bg-green-500',
-                dataFreshness === 'stale' && 'bg-yellow-500',
-                dataFreshness === 'updating' && 'bg-blue-500 animate-pulse'
-              )}
-            />
+        <Badge
+          variant={
+            dataFreshness === 'fresh'
+              ? 'success'
+              : dataFreshness === 'stale'
+              ? 'warning'
+              : 'secondary'
+          }
+          className="flex items-center gap-1 flex-shrink-0"
+        >
+          <span
+            className={cn(
+              'h-1.5 w-1.5 rounded-full',
+              dataFreshness === 'fresh' && 'bg-green-500',
+              dataFreshness === 'stale' && 'bg-yellow-500',
+              dataFreshness === 'updating' && 'bg-blue-500 animate-pulse'
+            )}
+          />
+          <span className="hidden sm:inline">
             {dataFreshness === 'fresh' && 'Data Fresh'}
             {dataFreshness === 'stale' && 'Data Stale'}
             {dataFreshness === 'updating' && 'Updating...'}
-          </Badge>
-        </div>
+          </span>
+        </Badge>
 
-        {/* Last Agent Run */}
+        {/* Last Agent Run - hidden on small mobile */}
         {lastAgentRun && (
-          <div className="flex items-center gap-1.5 text-sm text-cartex-muted">
+          <div className="hidden sm:flex items-center gap-1.5 text-sm text-cartex-muted flex-shrink-0">
             <Clock className="h-4 w-4" />
             <span>Agent ran {lastAgentRun}</span>
           </div>
@@ -81,9 +92,9 @@ export function Header({
 
         {/* Date Range Selector */}
         <Select value={dateRange} onValueChange={(value) => onDateRangeChange?.(value as DateRange)}>
-          <SelectTrigger className="w-[140px]">
-            <Calendar className="mr-2 h-4 w-4" />
-            <SelectValue placeholder="Select range" />
+          <SelectTrigger className="w-[120px] lg:w-[140px] flex-shrink-0">
+            <Calendar className="mr-1 lg:mr-2 h-4 w-4" />
+            <SelectValue placeholder="Range" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="today">Today</SelectItem>
@@ -94,11 +105,11 @@ export function Header({
           </SelectContent>
         </Select>
 
-        {/* Store Selector (placeholder for multi-store) */}
+        {/* Store Selector - hidden on mobile */}
         <Select defaultValue="main">
-          <SelectTrigger className="w-[180px]">
-            <Store className="mr-2 h-4 w-4" />
-            <SelectValue placeholder="Select store" />
+          <SelectTrigger className="hidden md:flex w-[140px] lg:w-[180px] flex-shrink-0">
+            <Store className="mr-1 lg:mr-2 h-4 w-4" />
+            <SelectValue placeholder="Store" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="main">Main Store</SelectItem>
@@ -111,11 +122,13 @@ export function Header({
           </SelectContent>
         </Select>
 
-        {/* Theme Toggle */}
-        <ThemeToggle />
+        {/* Theme Toggle - desktop only (mobile has it in title row) */}
+        <div className="hidden lg:block">
+          <ThemeToggle />
+        </div>
 
-        {/* Refresh Button */}
-        <Button variant="outline" size="icon">
+        {/* Refresh Button - desktop only (mobile has it in title row) */}
+        <Button variant="outline" size="icon" className="hidden lg:flex">
           <RefreshCw className="h-4 w-4" />
         </Button>
       </div>

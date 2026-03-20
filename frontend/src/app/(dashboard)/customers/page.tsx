@@ -148,7 +148,7 @@ export default function CustomersPage() {
         dataFreshness="fresh"
       />
 
-      <div className="p-6 space-y-6">
+      <div className="p-4 space-y-4 lg:p-6 lg:space-y-6">
         {/* Metrics Cards */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <Card>
