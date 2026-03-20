@@ -25,7 +25,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>
+      <body style={{ backgroundColor: 'var(--cartex-bg)', color: 'var(--cartex-text)' }}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

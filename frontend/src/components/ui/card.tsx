@@ -4,14 +4,19 @@ import { cn } from '@/lib/utils';
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { clickable?: boolean }
->(({ className, clickable, ...props }, ref) => (
+>(({ className, clickable, style, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      'rounded-lg border bg-cartex-card border-cartex shadow-sm',
+      'rounded-lg border shadow-sm',
       clickable && 'cursor-pointer transition-shadow hover:shadow-md',
       className
     )}
+    style={{
+      backgroundColor: 'var(--cartex-card)',
+      borderColor: 'var(--cartex-border)',
+      ...style,
+    }}
     {...props}
   />
 ));
@@ -44,10 +49,11 @@ CardTitle.displayName = 'CardTitle';
 const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
+>(({ className, style, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn('text-sm text-cartex-muted', className)}
+    className={cn('text-sm', className)}
+    style={{ color: 'var(--cartex-muted)', ...style }}
     {...props}
   />
 ));
