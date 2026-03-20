@@ -76,7 +76,7 @@ export function BriefCard({ brief, onActionClick, onIssueClick }: BriefCardProps
                 {severityIcons[issue.severity]}
                 <div className="flex-1">
                   <p className="text-sm font-medium text-cartex-text">{issue.title}</p>
-                  <p className="text-xs text-cartex-tertiary">{issue.category}</p>
+                  <p className="text-xs text-cartex-muted">{issue.category}</p>
                 </div>
                 {onIssueClick && <ArrowRight className="h-4 w-4 text-cartex-tertiary" />}
               </li>
