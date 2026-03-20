@@ -63,7 +63,7 @@ export function RecommendationsTable({
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm font-medium text-cartex-muted">
+        <CardTitle className="text-sm font-medium" style={{ color: 'var(--cartex-muted)' }}>
           Top Recommendations
         </CardTitle>
       </CardHeader>
@@ -71,7 +71,7 @@ export function RecommendationsTable({
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-cartex-border bg-cartex-surface">
+              <tr style={{ borderBottom: '1px solid var(--cartex-border)', backgroundColor: 'var(--cartex-surface)' }}>
                 <th className="table-header px-4 py-3 text-left">#</th>
                 <th className="table-header px-4 py-3 text-left">Type</th>
                 <th className="table-header px-4 py-3 text-left">Recommendation</th>
@@ -89,9 +89,10 @@ export function RecommendationsTable({
                     key={rec.id}
                     onClick={() => onRowClick?.(rec)}
                     className={cn(
-                      'table-row',
-                      onRowClick && 'cursor-pointer'
+                      'transition-colors',
+                      onRowClick && 'cursor-pointer hover:bg-[var(--cartex-surface)]'
                     )}
+                    style={{ borderBottom: '1px solid var(--cartex-border)' }}
                   >
                     <td className="px-4 py-3">
                       <Badge className={priorityStyles[rec.priority]}>
@@ -100,19 +101,19 @@ export function RecommendationsTable({
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <TypeIcon className="h-4 w-4 text-cartex-muted" />
-                        <span className="text-xs text-cartex-muted">{typeLabels[rec.type]}</span>
+                        <TypeIcon className="h-4 w-4" style={{ color: 'var(--cartex-muted)' }} />
+                        <span className="text-xs" style={{ color: 'var(--cartex-muted)' }}>{typeLabels[rec.type]}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
                       <div>
-                        <p className="text-sm font-medium text-cartex-text">{rec.title}</p>
-                        <p className="text-xs text-cartex-tertiary">{rec.entity}</p>
+                        <p className="text-sm font-medium" style={{ color: 'var(--cartex-text)' }}>{rec.title}</p>
+                        <p className="text-xs" style={{ color: 'var(--cartex-muted)' }}>{rec.entity}</p>
                       </div>
                     </td>
                     {!compact && (
                       <td className="px-4 py-3">
-                        <span className="text-sm text-cartex-muted">{rec.impactEstimate}</span>
+                        <span className="text-sm" style={{ color: 'var(--cartex-muted)' }}>{rec.impactEstimate}</span>
                       </td>
                     )}
                     <td className="px-4 py-3 text-center">
@@ -129,7 +130,7 @@ export function RecommendationsTable({
                     )}
                     <td className="px-4 py-3 text-right">
                       {onRowClick && (
-                        <ArrowRight className="inline-block h-4 w-4 text-cartex-tertiary" />
+                        <ArrowRight className="inline-block h-4 w-4" style={{ color: 'var(--cartex-muted)' }} />
                       )}
                     </td>
                   </tr>
