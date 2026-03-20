@@ -12,12 +12,12 @@ interface StockoutRiskTableProps {
   onRowClick?: (sku: InventorySKU) => void;
 }
 
-const riskStyles: Record<RiskClass, string> = {
-  critical: 'bg-red-100 text-red-800',
-  high: 'bg-orange-100 text-orange-800',
-  medium: 'bg-yellow-100 text-yellow-800',
-  low: 'bg-blue-100 text-blue-800',
-  healthy: 'bg-green-100 text-green-800',
+const riskColors: Record<RiskClass, { bg: string; text: string }> = {
+  critical: { bg: 'color-mix(in srgb, var(--cartex-danger) 20%, transparent)', text: 'var(--cartex-danger)' },
+  high: { bg: 'color-mix(in srgb, var(--cartex-ember) 20%, transparent)', text: 'var(--cartex-ember)' },
+  medium: { bg: 'color-mix(in srgb, var(--cartex-warning) 20%, transparent)', text: 'var(--cartex-warning)' },
+  low: { bg: 'color-mix(in srgb, var(--cartex-info) 20%, transparent)', text: 'var(--cartex-info)' },
+  healthy: { bg: 'color-mix(in srgb, var(--cartex-success) 20%, transparent)', text: 'var(--cartex-success)' },
 };
 
 const riskLabels: Record<RiskClass, string> = {
@@ -32,7 +32,7 @@ export function StockoutRiskTable({ data, onRowClick }: StockoutRiskTableProps) 
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm font-medium text-slate-600">
+        <CardTitle className="text-sm font-medium" style={{ color: 'var(--cartex-muted)' }}>
           Stockout Risk Analysis
         </CardTitle>
       </CardHeader>
@@ -40,7 +40,7 @@ export function StockoutRiskTable({ data, onRowClick }: StockoutRiskTableProps) 
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-surface-border bg-slate-50">
+              <tr style={{ borderBottom: '1px solid var(--cartex-border)', backgroundColor: 'var(--cartex-surface)' }}>
                 <th className="table-header px-4 py-3 text-left">SKU</th>
                 <th className="table-header px-4 py-3 text-left">Product</th>
                 <th className="table-header px-4 py-3 text-right">On Hand</th>
@@ -59,63 +59,66 @@ export function StockoutRiskTable({ data, onRowClick }: StockoutRiskTableProps) 
                   key={item.sku}
                   onClick={() => onRowClick?.(item)}
                   className={cn(
-                    'table-row',
+                    'transition-colors hover:bg-[var(--cartex-surface)]',
                     onRowClick && 'cursor-pointer'
                   )}
+                  style={{ borderBottom: '1px solid var(--cartex-border)' }}
                 >
                   <td className="px-4 py-3">
-                    <span className="font-mono text-xs text-slate-600">{item.sku}</span>
+                    <span className="font-mono text-xs" style={{ color: 'var(--cartex-muted)' }}>{item.sku}</span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-sm text-slate-900 max-w-xs truncate block">
+                    <span className="text-sm max-w-xs truncate block" style={{ color: 'var(--cartex-text)' }}>
                       {item.productName}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <span className="text-sm font-medium text-slate-900">
+                    <span className="text-sm font-medium" style={{ color: 'var(--cartex-text)' }}>
                       {formatNumber(item.inventoryOnHand)}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <span className="text-sm text-slate-600">
+                    <span className="text-sm" style={{ color: 'var(--cartex-muted)' }}>
                       {item.velocity7Day.toFixed(1)}/day
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <span className="text-sm text-slate-600">
+                    <span className="text-sm" style={{ color: 'var(--cartex-muted)' }}>
                       {item.velocity30Day.toFixed(1)}/day
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <span
-                      className={cn(
-                        'text-sm font-medium',
-                        item.daysRemaining <= 7 && 'text-red-600',
-                        item.daysRemaining > 7 && item.daysRemaining <= 14 && 'text-orange-600',
-                        item.daysRemaining > 14 && 'text-slate-600'
-                      )}
+                      className="text-sm font-medium"
+                      style={{
+                        color: item.daysRemaining <= 7
+                          ? 'var(--cartex-danger)'
+                          : item.daysRemaining <= 14
+                          ? 'var(--cartex-ember)'
+                          : 'var(--cartex-muted)'
+                      }}
                     >
                       {formatDaysRemaining(item.daysRemaining)}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <span className="text-sm text-slate-600">
+                    <span className="text-sm" style={{ color: 'var(--cartex-muted)' }}>
                       {item.revenueContribution.toFixed(1)}%
                     </span>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <Badge className={riskStyles[item.riskClass]}>
+                    <Badge style={{ backgroundColor: riskColors[item.riskClass].bg, color: riskColors[item.riskClass].text }}>
                       {riskLabels[item.riskClass]}
                     </Badge>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <span className="text-sm font-medium text-red-600">
+                    <span className="text-sm font-medium" style={{ color: 'var(--cartex-danger)' }}>
                       {formatCurrency(item.estimatedRevenueAtRisk)}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
                     {onRowClick && (
-                      <ArrowRight className="inline-block h-4 w-4 text-slate-400" />
+                      <ArrowRight className="inline-block h-4 w-4" style={{ color: 'var(--cartex-muted)' }} />
                     )}
                   </td>
                 </tr>

@@ -12,10 +12,10 @@ interface PromotionCandidatesTableProps {
   onRowClick?: (item: PromotionCandidate) => void;
 }
 
-const trendIcons = {
-  rising: <TrendingUp className="h-4 w-4 text-green-500" />,
-  stable: <Minus className="h-4 w-4 text-slate-400" />,
-  declining: <TrendingDown className="h-4 w-4 text-red-500" />,
+const trendColors = {
+  rising: 'var(--cartex-success)',
+  stable: 'var(--cartex-muted)',
+  declining: 'var(--cartex-danger)',
 };
 
 const trendLabels = {
@@ -24,10 +24,10 @@ const trendLabels = {
   declining: 'Declining',
 };
 
-const inventoryHealthStyles: Record<string, string> = {
-  overstocked: 'bg-orange-100 text-orange-800',
-  adequate: 'bg-green-100 text-green-800',
-  low: 'bg-red-100 text-red-800',
+const inventoryHealthColors: Record<string, { bg: string; text: string }> = {
+  overstocked: { bg: 'color-mix(in srgb, var(--cartex-ember) 20%, transparent)', text: 'var(--cartex-ember)' },
+  adequate: { bg: 'color-mix(in srgb, var(--cartex-success) 20%, transparent)', text: 'var(--cartex-success)' },
+  low: { bg: 'color-mix(in srgb, var(--cartex-danger) 20%, transparent)', text: 'var(--cartex-danger)' },
 };
 
 const inventoryHealthLabels: Record<string, string> = {
@@ -40,7 +40,7 @@ export function PromotionCandidatesTable({ data, onRowClick }: PromotionCandidat
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm font-medium text-slate-600">
+        <CardTitle className="text-sm font-medium" style={{ color: 'var(--cartex-muted)' }}>
           Promotion Candidates
         </CardTitle>
       </CardHeader>
@@ -48,7 +48,7 @@ export function PromotionCandidatesTable({ data, onRowClick }: PromotionCandidat
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-surface-border bg-slate-50">
+              <tr style={{ borderBottom: '1px solid var(--cartex-border)', backgroundColor: 'var(--cartex-surface)' }}>
                 <th className="table-header px-4 py-3 text-left">SKU</th>
                 <th className="table-header px-4 py-3 text-left">Product</th>
                 <th className="table-header px-4 py-3 text-center">Trend</th>
@@ -64,55 +64,60 @@ export function PromotionCandidatesTable({ data, onRowClick }: PromotionCandidat
                   key={item.sku}
                   onClick={() => onRowClick?.(item)}
                   className={cn(
-                    'table-row',
+                    'transition-colors hover:bg-[var(--cartex-surface)]',
                     onRowClick && 'cursor-pointer'
                   )}
+                  style={{ borderBottom: '1px solid var(--cartex-border)' }}
                 >
                   <td className="px-4 py-3">
-                    <span className="font-mono text-xs text-slate-600">{item.sku}</span>
+                    <span className="font-mono text-xs" style={{ color: 'var(--cartex-muted)' }}>{item.sku}</span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-sm text-slate-900 max-w-xs truncate block">
+                    <span className="text-sm max-w-xs truncate block" style={{ color: 'var(--cartex-text)' }}>
                       {item.productName}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-1.5">
-                      {trendIcons[item.trend]}
-                      <span className="text-xs text-slate-600">{trendLabels[item.trend]}</span>
+                      {item.trend === 'rising' && <TrendingUp className="h-4 w-4" style={{ color: trendColors.rising }} />}
+                      {item.trend === 'stable' && <Minus className="h-4 w-4" style={{ color: trendColors.stable }} />}
+                      {item.trend === 'declining' && <TrendingDown className="h-4 w-4" style={{ color: trendColors.declining }} />}
+                      <span className="text-xs" style={{ color: 'var(--cartex-muted)' }}>{trendLabels[item.trend]}</span>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <Badge className={inventoryHealthStyles[item.inventoryHealth]}>
+                    <Badge style={{ backgroundColor: inventoryHealthColors[item.inventoryHealth].bg, color: inventoryHealthColors[item.inventoryHealth].text }}>
                       {inventoryHealthLabels[item.inventoryHealth]}
                     </Badge>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <span className="text-sm text-slate-600">
+                    <span className="text-sm" style={{ color: 'var(--cartex-muted)' }}>
                       {formatCurrency(item.revenue30Day)}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <div className="w-12 h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="w-12 h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--cartex-surface)' }}>
                         <div
-                          className={cn(
-                            'h-full rounded-full',
-                            item.promotionScore >= 80 && 'bg-green-500',
-                            item.promotionScore >= 60 && item.promotionScore < 80 && 'bg-yellow-500',
-                            item.promotionScore < 60 && 'bg-slate-400'
-                          )}
-                          style={{ width: `${item.promotionScore}%` }}
+                          className="h-full rounded-full"
+                          style={{
+                            width: `${item.promotionScore}%`,
+                            backgroundColor: item.promotionScore >= 80
+                              ? 'var(--cartex-success)'
+                              : item.promotionScore >= 60
+                              ? 'var(--cartex-warning)'
+                              : 'var(--cartex-muted)'
+                          }}
                         />
                       </div>
-                      <span className="text-sm font-medium text-slate-900 w-8">
+                      <span className="text-sm font-medium w-8" style={{ color: 'var(--cartex-text)' }}>
                         {item.promotionScore}
                       </span>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-right">
                     {onRowClick && (
-                      <ArrowRight className="inline-block h-4 w-4 text-slate-400" />
+                      <ArrowRight className="inline-block h-4 w-4" style={{ color: 'var(--cartex-muted)' }} />
                     )}
                   </td>
                 </tr>

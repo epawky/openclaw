@@ -44,8 +44,8 @@ export default function InventoryPage() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-500 border-t-transparent mx-auto" />
-          <p className="mt-4 text-sm text-slate-500">Loading inventory analysis...</p>
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-t-transparent mx-auto" style={{ borderColor: 'var(--cartex-teal)', borderTopColor: 'transparent' }} />
+          <p className="mt-4 text-sm" style={{ color: 'var(--cartex-muted)' }}>Loading inventory analysis...</p>
         </div>
       </div>
     );
@@ -55,8 +55,8 @@ export default function InventoryPage() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <AlertTriangle className="h-12 w-12 text-red-500 mx-auto" />
-          <p className="mt-4 text-sm text-slate-700">{error || 'No data available'}</p>
+          <AlertTriangle className="h-12 w-12 mx-auto" style={{ color: 'var(--cartex-danger)' }} />
+          <p className="mt-4 text-sm" style={{ color: 'var(--cartex-text)' }}>{error || 'No data available'}</p>
         </div>
       </div>
     );
@@ -79,12 +79,12 @@ export default function InventoryPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
-                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--cartex-danger) 20%, transparent)' }}>
+                  <AlertTriangle className="h-5 w-5" style={{ color: 'var(--cartex-danger)' }} />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Critical SKUs</p>
-                  <p className="text-2xl font-semibold text-red-600">
+                  <p className="text-sm" style={{ color: 'var(--cartex-muted)' }}>Critical SKUs</p>
+                  <p className="text-2xl font-semibold" style={{ color: 'var(--cartex-danger)' }}>
                     {summary.criticalStockoutSKUs}
                   </p>
                 </div>
@@ -95,12 +95,12 @@ export default function InventoryPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
-                  <DollarSign className="h-5 w-5 text-orange-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--cartex-ember) 20%, transparent)' }}>
+                  <DollarSign className="h-5 w-5" style={{ color: 'var(--cartex-ember)' }} />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Revenue at Risk</p>
-                  <p className="text-2xl font-semibold text-orange-600">
+                  <p className="text-sm" style={{ color: 'var(--cartex-muted)' }}>Revenue at Risk</p>
+                  <p className="text-2xl font-semibold" style={{ color: 'var(--cartex-ember)' }}>
                     {formatCurrency(summary.estimatedRevenueAtRisk)}
                   </p>
                 </div>
@@ -111,12 +111,12 @@ export default function InventoryPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-yellow-100">
-                  <Package className="h-5 w-5 text-yellow-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--cartex-warning) 20%, transparent)' }}>
+                  <Package className="h-5 w-5" style={{ color: 'var(--cartex-warning)' }} />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Slow Movers</p>
-                  <p className="text-2xl font-semibold text-yellow-600">
+                  <p className="text-sm" style={{ color: 'var(--cartex-muted)' }}>Slow Movers</p>
+                  <p className="text-2xl font-semibold" style={{ color: 'var(--cartex-warning)' }}>
                     {summary.slowMoversCount}
                   </p>
                 </div>
@@ -127,12 +127,12 @@ export default function InventoryPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
-                  <Tag className="h-5 w-5 text-green-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--cartex-success) 20%, transparent)' }}>
+                  <Tag className="h-5 w-5" style={{ color: 'var(--cartex-success)' }} />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Top Promotion</p>
-                  <p className="text-lg font-semibold text-green-600 truncate max-w-[150px]">
+                  <p className="text-sm" style={{ color: 'var(--cartex-muted)' }}>Top Promotion</p>
+                  <p className="text-lg font-semibold truncate max-w-[150px]" style={{ color: 'var(--cartex-success)' }}>
                     {summary.topPromotionCandidate}
                   </p>
                 </div>
