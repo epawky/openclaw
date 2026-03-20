@@ -28,16 +28,16 @@ export function KPICard({ title, value, icon, onClick }: KPICardProps) {
   })();
 
   const healthColors = {
-    positive: 'bg-status-success-bg border-status-success/20',
-    warning: 'bg-status-warning-bg border-status-warning/20',
-    negative: 'bg-status-danger-bg border-status-danger/20',
-    neutral: 'bg-slate-50 border-slate-200',
+    positive: 'bg-cartex-success/10 border-cartex-success/20',
+    warning: 'bg-cartex-warning/10 border-cartex-warning/20',
+    negative: 'bg-cartex-danger/10 border-cartex-danger/20',
+    neutral: 'bg-cartex-surface border-cartex-border',
   };
 
   const deltaColors = {
-    positive: 'text-status-success',
-    negative: 'text-status-danger',
-    neutral: 'text-slate-500',
+    positive: 'text-cartex-success',
+    negative: 'text-cartex-danger',
+    neutral: 'text-cartex-muted',
   };
 
   return (
@@ -52,21 +52,21 @@ export function KPICard({ title, value, icon, onClick }: KPICardProps) {
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <p className="text-sm font-medium text-slate-600">{title}</p>
-            <p className="text-2xl font-semibold text-slate-900">{formattedValue}</p>
+            <p className="text-sm font-medium text-cartex-muted">{title}</p>
+            <p className="text-2xl font-semibold text-cartex-text">{formattedValue}</p>
           </div>
           {icon && (
-            <div className="rounded-lg bg-white/60 p-2 text-slate-600">{icon}</div>
+            <div className="rounded-lg bg-cartex-elevated p-2 text-cartex-muted">{icon}</div>
           )}
         </div>
 
         <div className="mt-3 flex items-center gap-1.5">
           {delta.isZero ? (
-            <Minus className="h-4 w-4 text-slate-400" />
+            <Minus className="h-4 w-4 text-cartex-tertiary" />
           ) : delta.isPositive ? (
-            <TrendingUp className="h-4 w-4 text-status-success" />
+            <TrendingUp className="h-4 w-4 text-cartex-success" />
           ) : (
-            <TrendingDown className="h-4 w-4 text-status-danger" />
+            <TrendingDown className="h-4 w-4 text-cartex-danger" />
           )}
           <span
             className={cn(
@@ -80,7 +80,7 @@ export function KPICard({ title, value, icon, onClick }: KPICardProps) {
           >
             {delta.value}
           </span>
-          <span className="text-sm text-slate-500">vs last 7 days</span>
+          <span className="text-sm text-cartex-tertiary">vs last 7 days</span>
         </div>
       </CardContent>
     </Card>
