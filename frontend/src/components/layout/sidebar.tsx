@@ -53,14 +53,14 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
         {!collapsed && (
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cartex-teal text-white font-semibold">
-              S
+              W
             </div>
-            <span className="text-lg font-semibold text-cartex">Stockroom</span>
+            <span className="text-lg font-semibold text-cartex">Whiskr</span>
           </div>
         )}
         {collapsed && (
           <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-cartex-teal text-white font-semibold text-xs">
-            S
+            W
           </div>
         )}
       </div>

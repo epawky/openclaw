@@ -3,7 +3,7 @@ import '@/styles/globals.css';
 import { ThemeProvider } from '@/lib/theme';
 
 export const metadata: Metadata = {
-  title: 'AI COO - Shopify Operations Dashboard',
+  title: 'Whiskr - Shopify Operations Dashboard',
   description: 'AI-powered operating cockpit for Shopify store management',
 };
 
