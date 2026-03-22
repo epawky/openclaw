@@ -12,18 +12,18 @@ import type { CustomerAnalysis, Recommendation } from '@/lib/types';
 
 // Cohort Retention Chart Component
 function CohortRetentionChart({ data }: { data: CustomerAnalysis['cohortRetention'] }) {
-  const getColor = (value: number) => {
-    if (value >= 40) return 'bg-green-500';
-    if (value >= 25) return 'bg-green-400';
-    if (value >= 15) return 'bg-yellow-400';
-    if (value > 0) return 'bg-orange-400';
-    return 'bg-slate-100';
+  const getCellStyle = (value: number): React.CSSProperties => {
+    if (value >= 40) return { background: '#10b981', color: '#ffffff' }; // emerald-500
+    if (value >= 25) return { background: '#34d399', color: '#064e3b' }; // emerald-400 with dark text
+    if (value >= 15) return { background: '#fbbf24', color: '#78350f' }; // amber-400 with dark text
+    if (value > 0) return { background: '#f97316', color: '#ffffff' }; // orange-500
+    return { background: 'var(--cartex-surface)', color: 'var(--cartex-muted)' };
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-sm font-medium text-slate-600">
+        <CardTitle className="text-sm font-medium" style={{ color: 'var(--cartex-text)' }}>
           Cohort Retention Analysis
         </CardTitle>
       </CardHeader>
@@ -31,32 +31,33 @@ function CohortRetentionChart({ data }: { data: CustomerAnalysis['cohortRetentio
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-surface-border">
-                <th className="table-header py-2 text-left">Cohort</th>
-                <th className="table-header py-2 text-center">Month 0</th>
-                <th className="table-header py-2 text-center">Month 1</th>
-                <th className="table-header py-2 text-center">Month 2</th>
-                <th className="table-header py-2 text-center">Month 3</th>
-                <th className="table-header py-2 text-center">Month 4</th>
-                <th className="table-header py-2 text-center">Month 5</th>
-                <th className="table-header py-2 text-center">Month 6</th>
+              <tr style={{ borderBottom: '1px solid var(--cartex-border)' }}>
+                <th className="py-2 text-left font-medium" style={{ color: 'var(--cartex-muted)' }}>Cohort</th>
+                <th className="py-2 text-center font-medium" style={{ color: 'var(--cartex-muted)' }}>Month 0</th>
+                <th className="py-2 text-center font-medium" style={{ color: 'var(--cartex-muted)' }}>Month 1</th>
+                <th className="py-2 text-center font-medium" style={{ color: 'var(--cartex-muted)' }}>Month 2</th>
+                <th className="py-2 text-center font-medium" style={{ color: 'var(--cartex-muted)' }}>Month 3</th>
+                <th className="py-2 text-center font-medium" style={{ color: 'var(--cartex-muted)' }}>Month 4</th>
+                <th className="py-2 text-center font-medium" style={{ color: 'var(--cartex-muted)' }}>Month 5</th>
+                <th className="py-2 text-center font-medium" style={{ color: 'var(--cartex-muted)' }}>Month 6</th>
               </tr>
             </thead>
             <tbody>
               {data.map((row) => (
-                <tr key={row.cohort} className="border-b border-surface-border">
-                  <td className="py-2 font-medium text-slate-700">{row.cohort}</td>
+                <tr key={row.cohort} style={{ borderBottom: '1px solid var(--cartex-border)' }}>
+                  <td className="py-2 font-medium" style={{ color: 'var(--cartex-text)' }}>{row.cohort}</td>
                   {[row.month0, row.month1, row.month2, row.month3, row.month4, row.month5, row.month6].map(
                     (value, idx) => (
                       <td key={idx} className="py-2 text-center">
                         {value > 0 ? (
                           <span
-                            className={`inline-flex items-center justify-center w-12 h-8 rounded ${getColor(value)} text-white text-xs font-medium`}
+                            className="inline-flex items-center justify-center w-12 h-8 rounded text-xs font-semibold"
+                            style={getCellStyle(value)}
                           >
                             {value}%
                           </span>
                         ) : (
-                          <span className="text-slate-300">-</span>
+                          <span style={{ color: 'var(--cartex-muted)' }}>-</span>
                         )}
                       </td>
                     )
@@ -66,21 +67,21 @@ function CohortRetentionChart({ data }: { data: CustomerAnalysis['cohortRetentio
             </tbody>
           </table>
         </div>
-        <div className="mt-4 flex items-center gap-4 text-xs text-slate-500">
+        <div className="mt-4 flex flex-wrap items-center gap-4 text-xs" style={{ color: 'var(--cartex-muted)' }}>
           <div className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded bg-green-500" />
+            <span className="h-3 w-3 rounded" style={{ background: '#10b981' }} />
             <span>40%+</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded bg-green-400" />
+            <span className="h-3 w-3 rounded" style={{ background: '#34d399' }} />
             <span>25-40%</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded bg-yellow-400" />
+            <span className="h-3 w-3 rounded" style={{ background: '#fbbf24' }} />
             <span>15-25%</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded bg-orange-400" />
+            <span className="h-3 w-3 rounded" style={{ background: '#f97316' }} />
             <span>&lt;15%</span>
           </div>
         </div>
